@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="37be471f-e168-4fed-b940-801be87675d8" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="66b1a002-fd37-4ba8-9bde-c7c9345630f6" >
+		<file:connection workingDir="C:\Users\Skanda\Desktop" />
+	</file:config>
+	<flow name="fileFlow" doc:id="d8d6470c-7c3b-43dc-86a4-1468766c0157" >
+		<file:move doc:name="Move" doc:id="73dc1b66-0251-439e-88a0-519bcdecd5f8" config-ref="File_Config" sourcePath="C:\fileconnector\input" targetPath="C:\fileconnector\output"/>
+	</flow>
+	<flow name="fileFlow1" doc:id="9f2eb1ad-e936-45bf-af18-38294cc74068" >
+		<file:listener doc:name="On New or Updated File" doc:id="e434f065-ded5-489f-8a46-5b79988c7423" config-ref="File_Config" directory="C:\copyfile" autoDelete="true" renameTo="shwwetha" timeBetweenSizeCheck="1" timeBetweenSizeCheckUnit="MINUTES">
+			<scheduling-strategy>
+				<fixed-frequency timeUnit="MINUTES" />
+			</scheduling-strategy>
+		</file:listener>
+		<file:copy doc:name="Copy" doc:id="fd219263-e28f-4c1d-b5ee-fe7531e0ee1d" config-ref="File_Config" sourcePath="C:\copyfile\in" targetPath="C:\copyfile\out"/>
+	</flow>
+</mule>
